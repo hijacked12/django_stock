@@ -1,0 +1,268 @@
+{% extends 'base.html'%}
+  
+{% block content %}
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+    <nav id="scrollspy" class="navbar page-navbar navbar-dark navbar-expand-md fixed-top" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}"><strong class="text-primary">STOCK PREDICTION </strong>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_stock' %}">Add Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'delete_stock' %}">Delete Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'predict' %}">Predict</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:8000/admin" title="Go to Admin page" target="_blank">Admin</a>
+                    </li>
+
+                </ul>
+            </div>
+            <li>
+            <form action="{% url 'result' %}" class="form-inline my-2 my-lg-0 text-nowrap" method="POST">
+                    {% csrf_token %}
+                <input name="ticker" class="form-control mr-sm-2" type="search"
+                placeholder="Get Stock Quote" aria-label="Search"><button class="btn btn-outline-success my-2 my-sm-0
+                " type="submit">Stock Quote</button>
+            </form>
+            </li>
+        </div>
+    </nav>
+    <header class="header d-flex justify-content-center">
+        <div class="container">
+            
+            <div class="row h-100 align-items-center">
+                
+                <div class="col-md-7">
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                        <a class="nav-link"> <h4> Welcome back, {{user.username}}</h4></a>
+                        {% endif %}
+
+                    </li><br><br>
+                    <div class="header-content">
+                        
+                        <h4 class="header-subtitle">Stock Prediction Using LSTM </h4>
+                        <p>LSTMs are widely used for sequence prediction problems and have proven to be extremely effective. The reason they work so well is that LSTM can store past important information and forget the information that is not relevant.
+                            The entire idea of predicting stock prices is to gain significant profits. Predicting how the stock market will perform is a hard task to do, but easy with our algorithm. Please note that there are other factors involved in the prediction, 
+                            such as physical and psychological factors, rational and irrational behavior, and so on. All these factors combine to make share prices dynamic and volatile.
+                        </p>
+                        <button class="btn btn-outline-light btn-flat" " target="_blank" onclick=" window.open('https://www.analyticsvidhya.com/blog/2021/12/stock-price-prediction-using-lstm/', '_blank');">Learn more about predictive algorithms</button>
+                    </div>  
+                </div>
+               
+            </div>  
+        </div>
+    </header>
+    <div class="social-wrapper" id="features">
+        <div class="container">
+            <div class="social-txt">
+                <h6 class="title">Social Media</h6>
+                <p class="subtitle">To follow us on social media</p>
+            </div>
+            <div class="social-links">
+                <a href="javascript:void(0)" class="link"><i class="ti-facebook"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-google"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-pinterest-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-instagram"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-rss"></i></a>
+            </div>
+        </div>          
+    </div>
+    <section class="section">
+        <div class="container">
+            <div class="row justify-content-around">
+                <div class="col-lg-8">
+                    <div class="tabs-container">
+                        <ul class="nav tab-nav" id="pills-tab">
+                            <li class="item">
+                                <a class="link active" id="pills-home-tab" data-toggle="pill" href="#pills-home"aria-selected="true">Apple</a>
+                            </li>
+                            <li class="item">
+                                <a class="link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"aria-selected="false">Alibaba</a>
+                            </li>
+                            <li class="item">
+                                <a class="link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"aria-selected="false">Tesla</a>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content">
+                            <h4 class="title">Some Common Company</h4>
+                            <div class="tab-pane fade show active" id="pills-home">
+                                
+                                {% if api %}
+                                    {% if api == "Error..." %}
+                                        There was a problem with the ticker symbol,
+                                        Please try again...
+                                    {% else %}
+                                        <h3> {{api.companyName}}</h3>
+                                        <b>Currency : {{api.currency}}</b><br/>
+                                        <b>Stock Price : ${{api.latestPrice}}</b><br/>
+                                        <b>Previous Close: {{api.previousClose}}</b><br/>
+                                        <b>Market Cap: {{ api.marketCap}}</b><br/>
+                                        <b>52Wk Market High : {{api.week52High}}</b><br/>
+                                        <b>52Wk Market Low : {{api.week52Low}}</b><br/>
+                                        <b>YTD Change : {{api.ytdChange}}</b><br/>
+                                        
+                                    
+                                        <b>Open Price : {{api.iexOpen}}</b><br/>
+                                        <b>Close Price : {{api.iexClose}}</b><br/>
+                                    
+                                        <b>Volume : {{api.avgTotalVolume}}</b><br/>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane fade" id="pills-profile">
+                                {% if api2 %}
+                                    {% if api2 == "Error..." %}
+                                        There was a problem with the ticker symbol,
+                                        Please try again...
+                                    {% else %}
+                                        <h3> {{api2.companyName}}</h3>
+                                        <b>Currency : {{api2.currency}}</b><br/>
+                                        <b>Stock Price : ${{api2.latestPrice}}</b><br/>
+                                        <b>Previous Close: {{api2.previousClose}}</b><br/>
+                                        <b>Market Cap: {{ api2.marketCap}}</b><br/>
+                                        <b>52Wk Market High : {{api2.week52High}}</b><br/>
+                                        <b>52Wk Market Low : {{api2.week52Low}}</b><br/>
+                                        <b>YTD Change : {{api2.ytdChange}}</b><br/>
+                                        
+                                    
+                                        <b>Open Price : {{api2.iexOpen}}</b><br/>
+                                        <b>Close Price : {{api2.iexClose}}</b><br/>
+                                    
+                                        <b>Volume : {{api2.avgTotalVolume}}</b><br/>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane fade" id="pills-contact">
+                                {% if api3 %}
+                                    {% if api3 == "Error..." %}
+                                        There was a problem with the ticker symbol,
+                                        Please try again...
+                                    {% else %}
+                                        <h3> {{api3.companyName}}</h3>
+                                        <b>Currency : {{api3.currency}}</b><br/>
+                                        <b>Stock Price : ${{api3.latestPrice}}</b><br/>
+                                        <b>Previous Close: {{api3.previousClose}}</b><br/>
+                                        <b>Market Cap: {{ api3.marketCap}}</b><br/>
+                                        <b>52Wk Market High : {{api3.week52High}}</b><br/>
+                                        <b>52Wk Market Low : {{api3.week52Low}}</b><br/>
+                                        <b>YTD Change : {{api3.ytdChange}}</b><br/>
+                                        
+                                    
+                                        <b>Open Price : {{api3.iexOpen}}</b><br/>
+                                        <b>Close Price : {{api3.iexClose}}</b><br/>
+                                    
+                                        <b>Volume : {{api3.avgTotalVolume}}</b><br/>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-none d-lg-block align-self-center">
+                    <img src="assets/imgs/eiffel-tower.svg" alt="" class="w-100 tower">
+                </div>
+            </div>                  
+        </div>                      
+    </section>
+
+    <section class="section" id="about">
+        <div class="container text-center">
+            <h6 class="display-4 has-line">WHY THIS IS AWESOME</h6>
+            <p class="mb-5 pb-4">Using our LSTM algorithm to predict your stock prices.</p>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="circle-100 mb-3"><i class="ti-light-bulb"></i></div>
+                    <h6 class="title mb-3">Discover Future Value</h6>
+                    <p> Our predictions helps you discover the future value of company stock and other financial assets traded on an exchange.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="circle-100 mb-3"><i class="ti-paint-bucket"></i></div>
+                    <h6 class="title mb-3">Well Designed</h6>
+                    <p>Our platform has a user-friendly design, which makes it easy for customers to navigate and control its components without any problem whatsoever.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="circle-100 mb-3"><i class="ti-marker-alt"></i></div>
+                    <h6 class="title mb-3">Top-Notch Algorithm</h6>
+                    <p> Our LSTM algorithm is more sophisticated than others out there. More precisely, 
+                        it is composed of more layers that regulate better the flow of information through our unit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+   
+    <section class="section has-img-bg text-center">
+        <div class="container">
+            <h6 class="display-3 has-line">PREDICT WITH US NOW</h6>
+            <h5 class="mb-5 font-weight-light">We use big data and machine learning to forecast stock prices. Our stock price predictions cover a period of 3 months.</h5>
+            <button class="btn btn-outline-light btn-flat">Get Started</button>
+        </div>
+    </section>
+    <section class="section" id="contact">
+        <div class="container text-center">
+            <h6 class="display-4 has-line">CONTACT US</h6>
+            <p class="mb-5 pb-2">If you encounter any problem and wish to contact us.</p>
+
+            <form>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group pb-1">
+                            <input type="text" class="form-control" required placeholder="Name">            
+                        </div>
+                        <div class="form-group pb-1">
+                            <input type="email" class="form-control" required placeholder="Email">          
+                        </div>
+                        <div class="form-group ">
+                            <input type="text" class="form-control" placeholder="Subject">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea name="" id="" cols="" rows="7" class="form-control" required placeholder="Message"></textarea>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-block" value="Send Message">
+            </form>
+        </div>
+    </section>
+    <footer class="footer py-4 bg-dark text-light"> 
+        <div class="container text-center">
+            <p class="mb-4 small">Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href=''>F18030124</a></p>
+            <div class="social-links">
+                <a href="javascript:void(0)" class="link"><i class="ti-facebook"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-google"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-pinterest-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-instagram"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-rss"></i></a>
+            </div>
+        </div>
+    </footer>
+    <div>
+        {% for message in messages%}
+        <h3> {{messages}} </h3>
+        {% endfor %}
+    </div>
+
+</body>
+{% endblock %} 

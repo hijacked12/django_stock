@@ -1,0 +1,145 @@
+{% extends 'base.html'%}
+  
+{% block content %}
+<script>
+    function toggleText2(){
+	var x = document.getElementById("info3").value;
+	var y = document.getElementById("info2").value;
+	if (parseInt(y) > 60){
+		alert("Days to predict cannot be more than 60!!") ;
+        pass;
+    }
+        
+	else if(x === "" || y === ""){
+		alert("Please fill all required box(es)!!") ;
+        
+	}else if (x != '' && y != ''){
+		alert("Please wait while the data is loading...") ;
+        
+	    }
+    }
+</script>
+{% load static %}
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home" >
+
+    <nav id="scrollspy" class="navbar page-navbar navbar-dark navbar-expand-md fixed-top" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}"><strong class="text-primary">STOCK PREDICTION </strong>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_stock' %}">Add Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'delete_stock' %}">Delete Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:8000/admin" title="Go to Admin page" target="_blank">Database Admin</a>
+                    </li>
+
+                </ul>
+            </div>
+            <li>
+            <form action="{% url 'result' %}" class="form-inline my-2 my-lg-0" method="POST">
+                    {% csrf_token %}
+                <input name="ticker" class="form-control mr-sm-2" type="search"
+                placeholder="Get Stock Quote" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0
+                " type="submit">Stock Quote</button>
+            </form>
+            </li>
+        </div>
+    </nav>
+    
+    
+    <div style="height: 2000px;">
+        
+        <header class="header d-flex justify-content-center" >
+            
+            <div class="container" >
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <h4 class="title">NOTE: Days to predict should not be more than 60 days. </h4><br/>
+                <b/>
+                <form action="{% url 'predict' %}" class="form-inline my-2 my-lg-0 " method="POST">
+                    {% csrf_token %}
+                    
+                    <input id="info3" name="ticker_sym" class="form-control mr-sm-2" 
+                    placeholder="Ticker Symbol" aria-label="Search">
+                    <input id="info2" name="days_predict" class="form-control mr-sm-2" 
+                    placeholder="No. days to predict" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0
+                    " type="submit" onclick="toggleText2()">Get Prediction</button>
+                </form>
+                <div ><br><br><br>
+      
+                    
+  
+                    <div class="header-content">
+                        {% if chart1 %}
+                            <h4 class="header-subtitle">Closing Price Result </h4>
+                            
+                                <img src="data:image/png;base64, {{ chart1 | safe }}">
+                                
+                        {% endif %}
+                    </div>  <br><br><br><br>
+                    
+
+                    <div class="header-content">
+                        {% if chart2 %}
+                            <h4 class="header-subtitle">Moving Average Result </h4>
+                            
+                                <img src="data:image/png;base64, {{ chart2 | safe }}">
+                                
+                        {% endif %}
+
+                    </div><br><br><br><br>
+
+                    <div class="header-content">
+                        {% if chart3 %}
+                            <h4 class="header-subtitle">Prediction Result </h4>
+                            
+                                <img src="data:image/png;base64, {{ chart3 | safe }}">
+                            
+                        {% endif %}
+                    </div>
+                
+                </div>  
+            </div>
+        </header>
+    </div>
+    <div class="col-lg-4 d-none d-lg-block align-self-center">
+        <script src="{% static 'assets/imgs/header2.jpg' %}" ></script>
+    </div>
+    
+    
+    
+    
+   
+   
+    <footer class="footer py-4 bg-dark text-light"> 
+        <div class="container text-center">
+            <p class="mb-4 small">Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href=''>F18030124</a></p>
+            <div class="social-links">
+                <a href="javascript:void(0)" class="link"><i class="ti-facebook"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-google"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-pinterest-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-instagram"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-rss"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+{% endblock %} 

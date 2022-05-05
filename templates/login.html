@@ -1,0 +1,80 @@
+{% extends 'base.html'%}
+  
+{% block content %}
+
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+    <nav id="scrollspy" class="navbar page-navbar navbar-dark navbar-expand-md fixed-top" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="navbar-brand" href="#"><strong class="text-primary">STOCK PREDICTION </strong>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link"  onclick="javascript:location.href='/templates/register'">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#review">Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="header d-flex justify-content-center">
+        <div class="container">
+            <div class="row h-100 align-items-center">
+                <div class="col-md-5 d-none d-md-block">
+                    <form class="header-form"  method="post">
+                        {% csrf_token%}
+                        <div class="head">Please <span class="text-primary">Login</span></div>
+                        <div class="body">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Name*" name="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Password*" name="password">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button class="btn btn-primary btn-block" type="Submit">Login</button>
+                        </div>
+                    </form> 
+                </div>
+            </div>  
+        </div>
+    </header>
+    <div class="social-wrapper" id="features">
+        <div class="container">
+            <div class="social-txt">
+                <h6 class="title">Social Media</h6>
+                <p class="subtitle">To follow us on social media</p>
+            </div>
+            <div class="social-links">
+                <a href="javascript:void(0)" class="link"><i class="ti-facebook"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-google"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-pinterest-alt"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-instagram"></i></a>
+                <a href="javascript:void(0)" class="link"><i class="ti-rss"></i></a>
+            </div>
+        </div>          
+    </div>
+    <div>
+        {% for message in messages%}
+        <h3> {{messages}} </h3>
+        {% endfor %}
+    </div>
+</body>
+{% endblock %} 

@@ -1,0 +1,540 @@
+
+{% extends 'base.html'%}
+  
+{% block content %}
+
+<h1></h1><br><br>
+
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    /* Style the header */
+    .header {
+
+      align-self:left;
+      background-color: #85e7c6a8;
+      padding: 30px;
+      text-align: center;
+      font-size: 20px;
+      float:inline-start;
+      
+    }
+    
+    /* Create three equal columns that floats next to each other */
+    .column {
+      float: left;
+      width: 33.33%;
+      padding: 10px;
+      border: 5px solid #62f8f8;
+      font-size:18px;
+      height: 30%;
+      
+    }
+
+    
+    
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+      
+    }
+    
+    /* Style the footer */
+    .footer {
+      background-color: #f1f1f1;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+    @media (max-width: 600px) {
+      .column {
+        width: 100%;
+      }
+    }
+
+    .menu {
+        float: left;
+        width: 20%;
+        text-align: center;
+      }
+    </style>
+<style>
+    .ping_buttons {
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      
+    }
+    .ping_buttons {
+        background-color: white;
+        color: black;
+        border: 2px solid #4CAF50;
+      }
+      
+      .ping_buttons:hover {
+        background-color: #4CAF60;
+        color: white;
+      }
+    
+    .ping_buttons {background-color: #6cc2b4;} /* Green */
+
+    .shutdown1 {
+        border: none;
+        color: rgb(212, 36, 36);
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 10px;
+        margin: 4px 2px;
+        cursor: pointer;
+        
+      }
+      .shutdown1 {
+        background-color: white;
+        color: black;
+        border: 2px solid #4CAF50;
+      }
+
+      .shutdown1:hover {
+        background-color: #4CAF60;
+        color: white;
+      }
+      .dropdown {
+          float: left;
+          overflow: hidden;
+      }
+      
+      .dropdown .dropbtn {
+          font-size: 18px;
+          border: none;
+          outline: none;
+          color: white;
+          padding: 14px 16px;
+          background-color: inherit;
+          font-family: inherit;
+          margin: 0;
+      }
+      
+      .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+      }
+      
+      .dropdown-content a {
+          float: none;
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+          
+      }
+      
+      .dropdown-content a:hover {
+          background-color: #ddd;
+          
+      }
+      
+      .dropdown:hover .dropdown-content {
+          display: block;
+      }
+    
+    </style>
+    
+    
+    
+
+    
+<script type= "text/javascript">
+
+    function info1(){
+        document.getElementById("info1").innerHTML = "*The client has been shutdown!<br> *For further tests, please restart client and reload page.";
+    }
+    
+    function info2(){
+        document.getElementById("info2").innerHTML = "*The client has been shutdown!<br> *For further tests, please restart client and reload page.";
+    }
+    
+    function info3(){
+        document.getElementById("info3").innerHTML = "*The client has been shutdown!<br> *For further tests, please restart client and reload page.";
+    }
+
+    
+    function toggleText(){
+        var x = document.getElementById("success");
+        if(x.style.display === "none"){
+            //x.style.display = "block";
+        }else {
+            x.style.display = "none";
+        }
+    }
+    
+    function toggleText2(){
+        var x = document.getElementById("info3").innerHTML;
+        var y = document.getElementById("info2").innerHTML;
+        if(x === "" || y === ""){
+            alert("Please fill all required box(es) before starting the test!!") ;
+        }else {
+            pass;
+        }
+    }
+    
+    
+        
+    var update1;
+    var update2;
+    var update3;
+    var status1;
+    var status2;
+    var status3;
+    const url='ping/'
+    const url2 = 'stop_ping/'
+    const url3='shutdown1/'
+    const url4='shutdown2/'
+    const url5='shutdown3/'
+    var url6='check_status/'
+    const url7='testnum/'
+    
+
+    const data={
+        'message':"Ping", 
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    const data2={
+        'message':"Stop Ping", 
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+
+    const data3={
+        'message':"Shutdown Mobile", 
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+
+    const data4={
+        'message':"Shutdown Unicom", 
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+
+    const data5={
+        'message':"Shutdown Telecom", 
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    const data6={
+        'message':"check_status", 
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+
+
+    $(document).ready(function () {
+    
+        function check_status1(data){
+            const myJSON = JSON.stringify(data)
+            if(myJSON.match("China mobile pinging"))
+                    update1 = "Ping Status: Pinging in progress...."
+            else(
+                    update1 = "Ping Status: idle"
+                )
+
+
+            if(myJSON.match("China unicom pinging"))
+                    update2 = "Ping Status: Pinging in progress...."
+            else(
+                    update2 = "Ping Status: idle"
+                )
+
+
+            if(myJSON.match("China telecom pinging"))
+                    update3 = "Ping Status: Pinging in progress...."
+            else(
+                    update3 = "Ping Status: idle"
+                )
+
+            if(myJSON.match("chinamobile online"))
+                    status1 = "online"
+            else(
+                    status1 = "offline"
+                )
+
+            if(myJSON.match("chinaunicom online"))
+                    status2 = "online"
+            else(
+                    status2 = "offline"
+                )
+
+
+            if(myJSON.match("chinatelecom online"))
+                    status3 = "online"
+            else(
+                    status3 = "offline"
+                )
+            $("#mode"+"1").html(update1)
+            $("#mode"+"2").html(update2)
+            $("#mode"+"3").html(update3)
+            $("#stats1").html(status1)
+            $("#stats2").html(status2)
+            $("#stats3").html(status3)
+
+}
+
+
+        $('#div_refresh').load("load.php")
+        setInterval(function(){
+            $('#div_refresh').load("load.php")
+            },3000);    
+
+        $('#ping').click(function(e){
+            $.post(url, data, function(data1, status, ){
+                console.log(`${data1} and status is ${status}`)
+                document.getElementById("ping_start").innerHTML = "*Ping command sent!<br> *Check status for details.";
+                check_status1(data1)
+            })
+            
+            console.log('Start Button clicked');
+            
+        });
+
+        $('#check_status').click(function(e){
+            
+            $.post(url6, data6, function(data, status){
+                console.log(`${data} and status is ${status}`)
+                check_status1(data)
+                });
+            });
+            
+        $('#stop_ping').click(function(e){
+            $.post(url2, data2, function(data, status){
+                console.log(`${data} and status is ${status}`)
+                check_status1(data)
+            })
+            console.log(' Stop Button clicked');
+            document.getElementById("ping_start").innerHTML = "*Stop ping command sent!<br> *Check status for details.";
+            
+        });
+
+        $('#shutdown1').click(function(e){
+            $.post(url3, data3, function(data, status){
+                console.log(`${data} and status is ${status}`)
+                
+            })
+            console.log(' Shutdown1 clicked');
+
+        });
+
+        $('#shutdown2').click(function(e){
+            $.post(url4, data4, function(data, status){
+                console.log(`${data} and status is ${status}`)
+            })
+            console.log(' Shutdown2 clicked');
+
+        });
+
+        $('#shutdown3').click(function(e){
+            $.post(url5, data5, function(data, status){
+                console.log(`${data} and status is ${status}`)
+            })
+            console.log(' Shutdown3 clicked');
+
+        });
+
+        
+
+        $('#submit').click(function(e){
+        
+            var empty = document.getElementById("testno").value;
+            if(empty == ""){
+                alert("Please enter Test name")
+            }else{
+            
+
+                var data7={
+                    'message': $("#testno").val(), 
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                }
+                var userPreference;
+
+                if (confirm("Do you want to save the test name?") == true) {
+
+                    $.post(url7, data7, function(data1, status, ){
+                        console.log(`${data1} and status is ${status}`)
+                        
+                    })
+                    
+                    document.getElementById("success").innerHTML = "Name added successfully!</br></br> You can now ping client(s).";
+                    var x = document.getElementById("success");
+                    if(x.style.display != "none") {
+                        x.style.display;
+                    }else {
+                        x.style.display;
+                    }
+
+                    userPreference = "Name saved successfully!";
+                } else {
+                        userPreference = "Save Cancelled!";
+                    }
+                        
+            
+            }
+            
+        });
+        
+
+
+       
+});
+   
+
+
+
+</script>
+<script type="text/javascript">
+
+
+    function reminder(){
+        if (!document.getElementById('testno').value.length){
+        document.getElementById("ping").disabled = true;
+        alert("Please enter Test Name")
+        }
+        else{
+            document.getElementById("ping").disabled = false;
+        }
+    }
+
+</script>
+
+
+    
+<head>
+</head>
+
+<body>
+    <div class="container">
+        
+        <div class="jumbotron">
+            <nav >
+                <ul class="d-flex flex-row align-items-start justify-content-start">
+                    <a class="menu" href="">Home</a>
+                    <a class="menu" href="http://192.168.1.100/admin" title="Go to Admin page" target="_blank">Database Admin</a>
+                
+
+
+                    {% if user.is_authenticated %}
+                    <a >Hello, {{user.username}}</a>
+                    <a class="menu" href="accounts/logout">Logout</a>
+
+                    {% else %}
+                    <a class="menu" href="accounts/register">Register</a>
+                    <a class="menu" href="accounts/login">Login</a>
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+            
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div id="div_refresh" class="column" style="background-color:rgba(56, 233, 159, 0.733);">
+                
+            
+            <label for="client1" id="client1"> Client 1 (China Mobile) </label><br><br>
+            <label for="client1" id="client1"> Connection Status: </label><label for="stats1" id="stats1" style="color:rgb(160, 57, 57)"> *{{status1}}</label><br><br>
+            <label id="mode1",for="prog1" >Ping Status: {{prog1}}</label><br><br>
+            <div class="dropdown">
+                    <button class="dropbtn">Other action(s)
+                    <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                    
+                        <button id="shutdown1" type="button" class = "shutdown1" onclick="info3()">Disconnect Mobile</button>
+                    </div>
+                </div><br><br>
+                <p id="info3" style="color:rgb(160, 57, 57)" ></p>
+            
+            </div>
+
+
+            <div class="column" style="background-color:rgba(73, 140, 196, 0.733);">
+                
+                <label for="client2"> Client 2 (China Unicom) </label><br><br>
+                <label for="client2" > Connection Status: </label><label for="stats2" id="stats2" style="color:rgb(160, 57, 57)"> *{{status2}}</label><br><br>
+                <label id="mode2",for="prog2" >Ping Status: {{prog2}}</label><br><br>
+                <div class="dropdown">
+                    <button class="dropbtn">Other action(s)
+                    <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                    
+                        <button id="shutdown2" type="button" class = "shutdown1" onclick="info2()">Disconnect Unicom</button>
+                    </div>
+                </div><br><br>
+                <p id="info2" style="color:rgb(160, 57, 57)" ></p>
+
+            </div>
+            
+            <div class="column" style="background-color:rgba(247, 58, 58, 0.733);">
+                
+                
+                <label for="client3"> Client 3  (China Telecom)</label><br><br>
+                <label for="client3" > Connection Status: </label><label for="stats3" id="stats3" style="color:rgb(160, 57, 59)"> *{{status3}}</label><br><br>
+                <label id="mode3",for="prog3" >Ping Status: {{prog3}}</label><br><br>
+                 <div class="dropdown">
+                    <button class="dropbtn">Other action(s)
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                    
+                        <button id="shutdown3" type="button" class = "shutdown1" onclick="info1()">Disconnect Telecom</button>
+                    </div>
+                </div><br><br>
+                <p id="info1" style="color:rgb(160, 57, 57)" ></p>
+            </div>
+        </div>
+    
+        <br><br>  
+        <form  method="POST"> {% csrf_token %}
+        <h2 style="color: rgb(153, 0, 0)">Please Enter Test Name</h2>
+
+        Test Name : <input type="text" id="testno" name="testno" onkeyup="reminder()"><button id="submit" name="submit" type="button" class = "shutdown1"  >Add</button><br>
+        <p id="success" style="color: rgb(160, 57, 57)"></p><br><br>
+
+        </form>
+
+        
+        <button id="ping" type="button" class = "ping_buttons" title="Starts pinging session" disabled>Ping Clients</button> 
+        <button id="check_status" type="button" class = "ping_buttons" title="Gets info on whether or not client is online/have started pinging" onclick="toggleText2()">Check Status</button>
+        <button id="stop_ping" type="button" class = "ping_buttons" title="Stops pinging session" onclick="toggleText()">Stop Pinging</button><br>
+        <p id="ping_start" style="color: rgb(160, 57, 57)"></p><br><br>
+        <h2 style="color: rgb(160, 57, 57)">*Note:</h2>
+        <p style="color: rgb(160, 57, 57)">"Check Status" button requires two clicks</p><br><br>
+    
+   
+    </div>
+
+    
+   
+</body>
+
+
+
+{% endblock %} 
